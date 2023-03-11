@@ -1,30 +1,73 @@
+class Job {
+  constructor(name, status, description) {
+    this.name = name;
+    this.status = status;
+    this.description = description;
+  }
+}
+
+class UI {
+  addJobToList(job) {
+    if (job.status === "toApply") {
+      const toApplyElement = $("<div>")
+        .addClass("toApplyClass")
+        .append("<h3>" + job.name)
+        .append("<p>" + job.description)
+        .append("<button>Applied")
+        .append("<button>Delete");
+
+     
+
+      $("#toApply div:first").before(toApplyElement);
+    } else {
+      const appliedElement = $("<div>")
+        .addClass("appliedClass")
+        .append("<h3>" + job.name)
+        .append("<p>" + job.description)
+        .append("<button>Delete");
+      $("#applied div:first").before(appliedElement);
+    }
+  }
+  deleteJob(target) {
+   
+  }
+
+}
 
 $(".form").submit(function (e) {
-  const nameValue = $("#name").val();
-  const statusValue = $("#status").val();
-  const textareaValue = $("#textarea").val();
+  const name = $("#name").val();
+  const status = $("#status").val();
+  const description = $("#textarea").val();
 
-  const toApplyElement = $("<div>")
-    .addClass("toApplyClass")
-    .append("<h3>" + nameValue)
-    .append("<p>" + textareaValue);
+  const job = new Job(name, status, description);
 
-  const appliedElement = $("<div>")
-    .addClass("appliedClass")
-    .append("<h3>" + nameValue)
-    .append("<p>" + textareaValue);
+  const ui = new UI();
+  ui.addJobToList(job);
 
-  if (statusValue === "toApply") {
-    const alltoApplyDivs = document.querySelectorAll(".toApply div");
+  // const toApplyElement = $("<div>")
+  //   .addClass("toApplyClass")
+  //   .append("<h3>" + nameValue)
+  //   .append("<p>" + textareaValue);
 
-    $("#toApply div:first").before(toApplyElement);
-  } else {
-    $("#applied div:first").before(appliedElement);
-  }
+  // const appliedElement = $("<div>")
+  //   .addClass("appliedClass")
+  //   .append("<h3>" + nameValue)
+  //   .append("<p>" + textareaValue);
+
+  // if (statusValue === "toApply") {
+  //   const alltoApplyDivs = document.querySelectorAll(".toApply div");
+
+  //   $("#toApply div:first").before(toApplyElement);
+  // } else {
+  //   $("#applied div:first").before(appliedElement);
+  // }
   e.preventDefault();
 });
- 
 
 
-
-
+$('.forDeleting').click(function(e){
+  if(e.target.innerText === "Delete") {
+    e.target.parentElement.remove()
+  }
+  e.preventDefault();
+})

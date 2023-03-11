@@ -93,5 +93,39 @@ label {
   border-radius: 20px;
   margin: 10px;
   padding: 2px;
-  
 }
+
+
+.toApplyClass button {
+  border-radius: 10px;
+  width: 100px;
+  height: 30px;
+  font-style: oblique;
+  font-weight: bold;
+  border: none;
+  margin: 5px;
+}
+
+.toApplyClass button:first-of-type {
+  background-color: #52b788; 
+}
+
+.toApplyClass button:last-of-type {
+  background-color: #ff4d6d;
+}
+
+.appliedClass button {
+  border-radius: 10px;
+  width: 100px;
+  height: 30px;
+  font-style: oblique;
+  font-weight: bold;
+  border: none;
+  margin: 5px;
+  background-color: #ff4d6d;
+}
+
+
+/* .toApplyClass button:last-child {
+  background-color: red;
+} */
