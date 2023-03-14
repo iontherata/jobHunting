@@ -16,8 +16,6 @@ class UI {
         .append("<button>Applied")
         .append("<button>Delete");
 
-     
-
       $("#toApply div:first").before(toApplyElement);
     } else {
       const appliedElement = $("<div>")
@@ -28,11 +26,53 @@ class UI {
       $("#applied div:first").before(appliedElement);
     }
   }
-  deleteJob(target) {
-   
+}
+
+class Store {
+  static getJobs() {
+    let jobs;
+
+    if (localStorage.getItem("jobs") === null) {
+      jobs = [];
+    } else {
+      jobs = JSON.parse(localStorage.getItem("jobs"));
+    }
+    return jobs;
   }
 
+  static displayJobs() {
+    const jobs = Store.getJobs();
+
+    jobs.forEach(function (job) {
+      const ui = new UI();
+      ui.addJobToList(job);
+    });
+  }
+
+  static addJob(job) {
+    const jobs = Store.getJobs();
+    jobs.push(job);
+    localStorage.setItem("jobs", JSON.stringify(jobs));
+  }
+
+  // static changeStatus(job){
+  //   const jobs = Store.getJobs();
+  //     for(job of jobs){}
+  // }
+
+  static removeJob(target) {
+    const jobs = Store.getJobs();
+
+    jobs.forEach(function (job, index) {
+      if (job.name === target) {
+        jobs.splice(index, 1);
+      }
+    });
+    localStorage.setItem("jobs", JSON.stringify(jobs));
+  }
 }
+
+document.addEventListener("DOMContentLoaded", Store.displayJobs);
 
 $(".form").submit(function (e) {
   const name = $("#name").val();
@@ -42,32 +82,35 @@ $(".form").submit(function (e) {
   const job = new Job(name, status, description);
 
   const ui = new UI();
+
   ui.addJobToList(job);
 
-  // const toApplyElement = $("<div>")
-  //   .addClass("toApplyClass")
-  //   .append("<h3>" + nameValue)
-  //   .append("<p>" + textareaValue);
+  Store.addJob(job);
 
-  // const appliedElement = $("<div>")
-  //   .addClass("appliedClass")
-  //   .append("<h3>" + nameValue)
-  //   .append("<p>" + textareaValue);
+  e.preventDefault();
+});
 
-  // if (statusValue === "toApply") {
-  //   const alltoApplyDivs = document.querySelectorAll(".toApply div");
+$(".forDeleting").click(function (e) {
+  if (e.target.innerText === "Delete") {
+    e.target.parentElement.remove();
+    Store.removeJob(e.target.parentElement.firstChild.innerText);
+  }
 
-  //   $("#toApply div:first").before(toApplyElement);
-  // } else {
-  //   $("#applied div:first").before(appliedElement);
-  // }
+  e.preventDefault();
+});
+
+$(".forDeleting").click(function (e) {
+  if (e.target.innerText === "Applied") {
+    $(e.target.parentElement).removeClass("toApplyClass");
+    console.log(e.target.parentElement.firstChild.innerText);
+
+    $("#applied div:first").before(e.target.parentElement);
+    $(e.target.parentElement).addClass("appliedClass");
+    e.target.remove();
+
+    // e.target.parentElement.remove();
+  }
   e.preventDefault();
 });
 
 
-$('.forDeleting').click(function(e){
-  if(e.target.innerText === "Delete") {
-    e.target.parentElement.remove()
-  }
-  e.preventDefault();
-})
